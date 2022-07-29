@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище DraftDatabaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Materials">
+          <Key>
+            <PropertyRef Name="IdM" />
+          </Key>
+          <Property Name="IdM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdTM" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="Cost" Type="money" Nullable="false" />
+          <Property Name="QuantityStock" Type="int" Nullable="false" />
+          <Property Name="MinimumAllowableQuantity" Type="int" Nullable="false" />
+          <Property Name="QuantityPackage" Type="int" Nullable="false" />
+          <Property Name="IdUM" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PossibleSuppliers">
+          <Key>
+            <PropertyRef Name="IdM" />
+            <PropertyRef Name="IdS" />
+          </Key>
+          <Property Name="IdM" Type="int" Nullable="false" />
+          <Property Name="IdS" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Suppliers">
+          <Key>
+            <PropertyRef Name="IdS" />
+          </Key>
+          <Property Name="IdS" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="IdTS" Type="int" Nullable="false" />
+          <Property Name="INN" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="QualityRating" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TypesMaterials">
+          <Key>
+            <PropertyRef Name="IdTM" />
+          </Key>
+          <Property Name="IdTM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TypesSuppliers">
+          <Key>
+            <PropertyRef Name="IdTS" />
+          </Key>
+          <Property Name="IdTS" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UnitsMeasurement">
+          <Key>
+            <PropertyRef Name="IdUM" />
+          </Key>
+          <Property Name="IdUM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "DraftDatabase.dbo.MaterialsView" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="MaterialsView">
+          <Key>
+            <PropertyRef Name="IdM" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="IdTM" />
+            <PropertyRef Name="Cost" />
+            <PropertyRef Name="QuantityStock" />
+            <PropertyRef Name="MinimumAllowableQuantity" />
+            <PropertyRef Name="QuantityPackage" />
+            <PropertyRef Name="IdUM" />
+          </Key>
+          <Property Name="IdM" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdTM" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="Cost" Type="money" Nullable="false" />
+          <Property Name="QuantityStock" Type="int" Nullable="false" />
+          <Property Name="MinimumAllowableQuantity" Type="int" Nullable="false" />
+          <Property Name="QuantityPackage" Type="int" Nullable="false" />
+          <Property Name="IdUM" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="NameTM" Type="nvarchar" MaxLength="50" />
+          <Property Name="PS" Type="nvarchar" MaxLength="4000" />
+        </EntityType>
+        <Association Name="FK_Materials_TypesMaterials">
+          <End Role="TypesMaterials" Type="Self.TypesMaterials" Multiplicity="1" />
+          <End Role="Materials" Type="Self.Materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypesMaterials">
+              <PropertyRef Name="IdTM" />
+            </Principal>
+            <Dependent Role="Materials">
+              <PropertyRef Name="IdTM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materials_UnitsMeasurement">
+          <End Role="UnitsMeasurement" Type="Self.UnitsMeasurement" Multiplicity="1" />
+          <End Role="Materials" Type="Self.Materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UnitsMeasurement">
+              <PropertyRef Name="IdUM" />
+            </Principal>
+            <Dependent Role="Materials">
+              <PropertyRef Name="IdUM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PossibleSuppliers_Materials">
+          <End Role="Materials" Type="Self.Materials" Multiplicity="1" />
+          <End Role="PossibleSuppliers" Type="Self.PossibleSuppliers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materials">
+              <PropertyRef Name="IdM" />
+            </Principal>
+            <Dependent Role="PossibleSuppliers">
+              <PropertyRef Name="IdM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PossibleSuppliers_Suppliers">
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="1" />
+          <End Role="PossibleSuppliers" Type="Self.PossibleSuppliers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suppliers">
+              <PropertyRef Name="IdS" />
+            </Principal>
+            <Dependent Role="PossibleSuppliers">
+              <PropertyRef Name="IdS" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Suppliers_TypesSuppliers">
+          <End Role="TypesSuppliers" Type="Self.TypesSuppliers" Multiplicity="1" />
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypesSuppliers">
+              <PropertyRef Name="IdTS" />
+            </Principal>
+            <Dependent Role="Suppliers">
+              <PropertyRef Name="IdTS" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DraftDatabaseModelContainer">
+          <EntitySet Name="Materials" EntityType="Self.Materials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PossibleSuppliers" EntityType="Self.PossibleSuppliers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypesMaterials" EntityType="Self.TypesMaterials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypesSuppliers" EntityType="Self.TypesSuppliers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UnitsMeasurement" EntityType="Self.UnitsMeasurement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MaterialsView" EntityType="Self.MaterialsView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MaterialsView].[IdM] AS [IdM], 
+    [MaterialsView].[Name] AS [Name], 
+    [MaterialsView].[IdTM] AS [IdTM], 
+    [MaterialsView].[Image] AS [Image], 
+    [MaterialsView].[Cost] AS [Cost], 
+    [MaterialsView].[QuantityStock] AS [QuantityStock], 
+    [MaterialsView].[MinimumAllowableQuantity] AS [MinimumAllowableQuantity], 
+    [MaterialsView].[QuantityPackage] AS [QuantityPackage], 
+    [MaterialsView].[IdUM] AS [IdUM], 
+    [MaterialsView].[Description] AS [Description], 
+    [MaterialsView].[NameTM] AS [NameTM], 
+    [MaterialsView].[PS] AS [PS]
+    FROM [dbo].[MaterialsView] AS [MaterialsView]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Materials_TypesMaterials" Association="Self.FK_Materials_TypesMaterials">
+            <End Role="TypesMaterials" EntitySet="TypesMaterials" />
+            <End Role="Materials" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materials_UnitsMeasurement" Association="Self.FK_Materials_UnitsMeasurement">
+            <End Role="UnitsMeasurement" EntitySet="UnitsMeasurement" />
+            <End Role="Materials" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PossibleSuppliers_Materials" Association="Self.FK_PossibleSuppliers_Materials">
+            <End Role="Materials" EntitySet="Materials" />
+            <End Role="PossibleSuppliers" EntitySet="PossibleSuppliers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PossibleSuppliers_Suppliers" Association="Self.FK_PossibleSuppliers_Suppliers">
+            <End Role="Suppliers" EntitySet="Suppliers" />
+            <End Role="PossibleSuppliers" EntitySet="PossibleSuppliers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Suppliers_TypesSuppliers" Association="Self.FK_Suppliers_TypesSuppliers">
+            <End Role="TypesSuppliers" EntitySet="TypesSuppliers" />
+            <End Role="Suppliers" EntitySet="Suppliers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DraftDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DraftDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Materials" EntityType="DraftDatabaseModel.Materials" />
+          <EntitySet Name="Suppliers" EntityType="DraftDatabaseModel.Suppliers" />
+          <EntitySet Name="TypesMaterials" EntityType="DraftDatabaseModel.TypesMaterials" />
+          <EntitySet Name="TypesSuppliers" EntityType="DraftDatabaseModel.TypesSuppliers" />
+          <EntitySet Name="UnitsMeasurement" EntityType="DraftDatabaseModel.UnitsMeasurement" />
+          <EntitySet Name="MaterialsView" EntityType="DraftDatabaseModel.MaterialsView" />
+          <AssociationSet Name="FK_Materials_TypesMaterials" Association="DraftDatabaseModel.FK_Materials_TypesMaterials">
+            <End Role="TypesMaterials" EntitySet="TypesMaterials" />
+            <End Role="Materials" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materials_UnitsMeasurement" Association="DraftDatabaseModel.FK_Materials_UnitsMeasurement">
+            <End Role="UnitsMeasurement" EntitySet="UnitsMeasurement" />
+            <End Role="Materials" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Suppliers_TypesSuppliers" Association="DraftDatabaseModel.FK_Suppliers_TypesSuppliers">
+            <End Role="TypesSuppliers" EntitySet="TypesSuppliers" />
+            <End Role="Suppliers" EntitySet="Suppliers" />
+          </AssociationSet>
+          <AssociationSet Name="PossibleSuppliers" Association="DraftDatabaseModel.PossibleSuppliers">
+            <End Role="Materials" EntitySet="Materials" />
+            <End Role="Suppliers" EntitySet="Suppliers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Materials">
+          <Key>
+            <PropertyRef Name="IdM" />
+          </Key>
+          <Property Name="IdM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdTM" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="QuantityStock" Type="Int32" Nullable="false" />
+          <Property Name="MinimumAllowableQuantity" Type="Int32" Nullable="false" />
+          <Property Name="QuantityPackage" Type="Int32" Nullable="false" />
+          <Property Name="IdUM" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TypesMaterials" Relationship="DraftDatabaseModel.FK_Materials_TypesMaterials" FromRole="Materials" ToRole="TypesMaterials" />
+          <NavigationProperty Name="UnitsMeasurement" Relationship="DraftDatabaseModel.FK_Materials_UnitsMeasurement" FromRole="Materials" ToRole="UnitsMeasurement" />
+          <NavigationProperty Name="Suppliers" Relationship="DraftDatabaseModel.PossibleSuppliers" FromRole="Materials" ToRole="Suppliers" />
+        </EntityType>
+        <EntityType Name="Suppliers">
+          <Key>
+            <PropertyRef Name="IdS" />
+          </Key>
+          <Property Name="IdS" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IdTS" Type="Int32" Nullable="false" />
+          <Property Name="INN" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="QualityRating" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="TypesSuppliers" Relationship="DraftDatabaseModel.FK_Suppliers_TypesSuppliers" FromRole="Suppliers" ToRole="TypesSuppliers" />
+          <NavigationProperty Name="Materials" Relationship="DraftDatabaseModel.PossibleSuppliers" FromRole="Suppliers" ToRole="Materials" />
+        </EntityType>
+        <EntityType Name="TypesMaterials">
+          <Key>
+            <PropertyRef Name="IdTM" />
+          </Key>
+          <Property Name="IdTM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Materials" Relationship="DraftDatabaseModel.FK_Materials_TypesMaterials" FromRole="TypesMaterials" ToRole="Materials" />
+        </EntityType>
+        <EntityType Name="TypesSuppliers">
+          <Key>
+            <PropertyRef Name="IdTS" />
+          </Key>
+          <Property Name="IdTS" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Suppliers" Relationship="DraftDatabaseModel.FK_Suppliers_TypesSuppliers" FromRole="TypesSuppliers" ToRole="Suppliers" />
+        </EntityType>
+        <EntityType Name="UnitsMeasurement">
+          <Key>
+            <PropertyRef Name="IdUM" />
+          </Key>
+          <Property Name="IdUM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Materials" Relationship="DraftDatabaseModel.FK_Materials_UnitsMeasurement" FromRole="UnitsMeasurement" ToRole="Materials" />
+        </EntityType>
+        <EntityType Name="MaterialsView">
+          <Key>
+            <PropertyRef Name="IdM" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="IdTM" />
+            <PropertyRef Name="Cost" />
+            <PropertyRef Name="QuantityStock" />
+            <PropertyRef Name="MinimumAllowableQuantity" />
+            <PropertyRef Name="QuantityPackage" />
+            <PropertyRef Name="IdUM" />
+          </Key>
+          <Property Name="IdM" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdTM" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="QuantityStock" Type="Int32" Nullable="false" />
+          <Property Name="MinimumAllowableQuantity" Type="Int32" Nullable="false" />
+          <Property Name="QuantityPackage" Type="Int32" Nullable="false" />
+          <Property Name="IdUM" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NameTM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PS" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Materials_TypesMaterials">
+          <End Type="DraftDatabaseModel.TypesMaterials" Role="TypesMaterials" Multiplicity="1" />
+          <End Type="DraftDatabaseModel.Materials" Role="Materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypesMaterials">
+              <PropertyRef Name="IdTM" />
+            </Principal>
+            <Dependent Role="Materials">
+              <PropertyRef Name="IdTM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materials_UnitsMeasurement">
+          <End Type="DraftDatabaseModel.UnitsMeasurement" Role="UnitsMeasurement" Multiplicity="1" />
+          <End Type="DraftDatabaseModel.Materials" Role="Materials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UnitsMeasurement">
+              <PropertyRef Name="IdUM" />
+            </Principal>
+            <Dependent Role="Materials">
+              <PropertyRef Name="IdUM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Suppliers_TypesSuppliers">
+          <End Type="DraftDatabaseModel.TypesSuppliers" Role="TypesSuppliers" Multiplicity="1" />
+          <End Type="DraftDatabaseModel.Suppliers" Role="Suppliers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypesSuppliers">
+              <PropertyRef Name="IdTS" />
+            </Principal>
+            <Dependent Role="Suppliers">
+              <PropertyRef Name="IdTS" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PossibleSuppliers">
+          <End Type="DraftDatabaseModel.Materials" Role="Materials" Multiplicity="*" />
+          <End Type="DraftDatabaseModel.Suppliers" Role="Suppliers" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DraftDatabaseModelContainer" CdmEntityContainer="DraftDatabaseEntities">
+          <EntitySetMapping Name="Materials">
+            <EntityTypeMapping TypeName="DraftDatabaseModel.Materials">
+              <MappingFragment StoreEntitySet="Materials">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdUM" ColumnName="IdUM" />
+                <ScalarProperty Name="QuantityPackage" ColumnName="QuantityPackage" />
+                <ScalarProperty Name="MinimumAllowableQuantity" ColumnName="MinimumAllowableQuantity" />
+                <ScalarProperty Name="QuantityStock" ColumnName="QuantityStock" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IdTM" ColumnName="IdTM" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdM" ColumnName="IdM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="DraftDatabaseModel.Suppliers">
+              <MappingFragment StoreEntitySet="Suppliers">
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="QualityRating" ColumnName="QualityRating" />
+                <ScalarProperty Name="INN" ColumnName="INN" />
+                <ScalarProperty Name="IdTS" ColumnName="IdTS" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdS" ColumnName="IdS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypesMaterials">
+            <EntityTypeMapping TypeName="DraftDatabaseModel.TypesMaterials">
+              <MappingFragment StoreEntitySet="TypesMaterials">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdTM" ColumnName="IdTM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypesSuppliers">
+            <EntityTypeMapping TypeName="DraftDatabaseModel.TypesSuppliers">
+              <MappingFragment StoreEntitySet="TypesSuppliers">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdTS" ColumnName="IdTS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UnitsMeasurement">
+            <EntityTypeMapping TypeName="DraftDatabaseModel.UnitsMeasurement">
+              <MappingFragment StoreEntitySet="UnitsMeasurement">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdUM" ColumnName="IdUM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MaterialsView">
+            <EntityTypeMapping TypeName="DraftDatabaseModel.MaterialsView">
+              <MappingFragment StoreEntitySet="MaterialsView">
+                <ScalarProperty Name="PS" ColumnName="PS" />
+                <ScalarProperty Name="NameTM" ColumnName="NameTM" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdUM" ColumnName="IdUM" />
+                <ScalarProperty Name="QuantityPackage" ColumnName="QuantityPackage" />
+                <ScalarProperty Name="MinimumAllowableQuantity" ColumnName="MinimumAllowableQuantity" />
+                <ScalarProperty Name="QuantityStock" ColumnName="QuantityStock" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IdTM" ColumnName="IdTM" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdM" ColumnName="IdM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PossibleSuppliers" TypeName="DraftDatabaseModel.PossibleSuppliers" StoreEntitySet="PossibleSuppliers">
+            <EndProperty Name="Suppliers">
+              <ScalarProperty Name="IdS" ColumnName="IdS" />
+            </EndProperty>
+            <EndProperty Name="Materials">
+              <ScalarProperty Name="IdM" ColumnName="IdM" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
